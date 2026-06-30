@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { useApi } from './useApi';
+import {useCallback, useState} from 'react';
+import {useApi} from './useApi';
 
 export interface TransactionData {
   description: string;
@@ -30,13 +30,13 @@ export function useChat() {
       const userMsg: ChatMessage = { id: Date.now().toString(), role: 'user', content };
       setMessages((prev) => [...prev, userMsg]);
 
-      const res = await request('/chat', 'POST', { message: content });
+      const res = await request('/chat', 'POST', { content });
       if (res) {
         const assistantMsg: ChatMessage = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
           content: res.reply,
-          transaction: res.transaction,
+          transaction: res.transaction ?? undefined,
         };
         setMessages((prev) => [...prev, assistantMsg]);
       } else {
@@ -57,9 +57,9 @@ export function useChat() {
 }
 
 function parseFallbackTransaction(text: string): TransactionData | null {
-  const amountMatch = text.match(/\$?([\d,]+(?:\.\d{2})?)/);
+  const amountMatch = text.match(/[\$₹]?([\d,]+(?:\.\d{2})?)/);
   if (!amountMatch) return null;
   const amount = -parseFloat(amountMatch[1].replace(',', ''));
   const description = text.replace(amountMatch[0], '').replace(/spent|paid|bought/gi, '').trim() || 'Transaction';
-  return { description, amount, date: new Date().toISOString(), category: 'General' };
+  return { description, amount, date: new Date().toISOString().split('T')[0], category: 'other' };
 }

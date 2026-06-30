@@ -1,31 +1,37 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../hooks/useThemeColor';
-import { useTransactions, Transaction } from '../../hooks/useTransactions';
+import React, {useEffect, useState} from 'react';
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import {Ionicons} from '@expo/vector-icons';
+import {useTheme} from '../../hooks/useThemeColor';
+import {useTransactions} from '../../hooks/useTransactions';
 
 export default function TransactionsScreen() {
   const theme = useTheme();
-  const { transactions, loading, createTransaction } = useTransactions();
+  const { transactions, loading, createTransaction, fetchTransactions } = useTransactions();
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [localItems, setLocalItems] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
 
   const handleSubmit = async () => {
     if (!description.trim() || !amount.trim()) return;
-    const newItem: Transaction = {
-      id: Date.now().toString(),
-      description: description.trim(),
-      amount: parseFloat(amount) || 0,
-      date: new Date().toISOString(),
-    };
-    setLocalItems((prev) => [newItem, ...prev]);
     setDescription('');
     setAmount('');
-    await createTransaction(newItem.description, newItem.amount);
+    await createTransaction(description.trim(), parseFloat(amount) || 0);
+    fetchTransactions();
   };
 
-  const allItems = [...localItems, ...(transactions ?? [])];
+  const allItems = transactions ?? [];
 
   return (
     <KeyboardAvoidingView

@@ -1,26 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { ActionCard } from '../../components/ui/ActionCard';
-import { useTheme } from '../../hooks/useThemeColor';
-import { useAuth } from '../../context/AuthContext';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useRouter} from 'expo-router';
+import {Ionicons} from '@expo/vector-icons';
+import {ActionCard} from '../../components/ui/ActionCard';
+import {useTheme} from '../../hooks/useThemeColor';
+import {useAuth} from '../../context/AuthContext';
 
 export default function DashboardScreen() {
   const router = useRouter();
   const theme = useTheme();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.header}>
         <View>
-          <Text style={[styles.greeting, { color: theme.textSecondary }]}>Good to see you</Text>
+          <Text style={[styles.greeting, { color: theme.textSecondary }]}>Hi, {user?.name?.split(' ')[0] ?? 'there'}</Text>
           <Text style={[styles.title, { color: theme.text }]}>Chanakya</Text>
         </View>
         <TouchableOpacity
           style={[styles.logoutBtn, { backgroundColor: theme.card, borderColor: theme.border }]}
-          onPress={() => { logout(); router.replace('/'); }}
+          onPress={() => { logout(); }}
         >
           <Ionicons name="log-out-outline" size={20} color={theme.muted} />
         </TouchableOpacity>

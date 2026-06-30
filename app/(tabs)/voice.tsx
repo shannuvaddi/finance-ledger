@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../hooks/useThemeColor';
-import { useVoiceRecord } from '../../hooks/useVoiceRecord';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Ionicons} from '@expo/vector-icons';
+import {useTheme} from '../../hooks/useThemeColor';
+import {useVoiceRecord} from '../../hooks/useVoiceRecord';
+import {TransactionCard} from '../../components/ui/TransactionCard';
 
 export default function VoiceScreen() {
   const theme = useTheme();
-  const { recording, loading, startRecording, stopRecording } = useVoiceRecord();
+  const { recording, loading, error, result, startRecording, stopRecording } = useVoiceRecord();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -36,6 +36,25 @@ export default function VoiceScreen() {
         {loading && (
           <Text style={[styles.status, { color: theme.textSecondary }]}>Processing...</Text>
         )}
+
+        {error && (
+          <Text style={[styles.status, { color: theme.danger }]}>{error}</Text>
+        )}
+
+        {result && (
+          <View style={styles.resultArea}>
+            <Text style={[styles.transcription, { color: theme.text }]}>"{result.transcription}"</Text>
+            <Text style={[styles.reply, { color: theme.textSecondary }]}>{result.chat.reply}</Text>
+            {result.chat.transaction && (
+              <TransactionCard
+                description={result.chat.transaction.description}
+                amount={result.chat.transaction.amount}
+                category={result.chat.transaction.category}
+                date={result.chat.transaction.date}
+              />
+            )}
+          </View>
+        )}
       </View>
 
       <Text style={[styles.hint, { color: theme.muted }]}>
@@ -54,5 +73,8 @@ const styles = StyleSheet.create({
   pulse: { position: 'absolute', width: 160, height: 160, borderRadius: 80, borderWidth: 3 },
   micBtn: { width: 110, height: 110, borderRadius: 55, alignItems: 'center', justifyContent: 'center', elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 12 },
   status: { marginTop: 32, fontSize: 14 },
+  resultArea: { marginTop: 32, alignItems: 'center', paddingHorizontal: 16, gap: 10 },
+  transcription: { fontSize: 15, fontStyle: 'italic', textAlign: 'center' },
+  reply: { fontSize: 14, textAlign: 'center' },
   hint: { textAlign: 'center', fontSize: 13, fontStyle: 'italic', paddingBottom: 24 },
 });

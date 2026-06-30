@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import {useCallback, useState} from 'react';
+import {useAuth} from '@/context/AuthContext';
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3000/api';
 
@@ -11,6 +12,7 @@ interface ApiState<T> {
 }
 
 export function useApi<T = unknown>() {
+  const { token } = useAuth();
   const [state, setState] = useState<ApiState<T>>({
     data: null,
     loading: false,
@@ -21,12 +23,19 @@ export function useApi<T = unknown>() {
     async (endpoint: string, method: HttpMethod = 'GET', body?: unknown): Promise<T | null> => {
       setState({ data: null, loading: true, error: null });
       try {
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
         const res = await fetch(`${BASE_URL}${endpoint}`, {
           method,
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           body: body ? JSON.stringify(body) : undefined,
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => null);
+          throw new Error(errorData?.error || `HTTP ${res.status}`);
+        }
         const data: T = await res.json();
         setState({ data, loading: false, error: null });
         return data;
@@ -35,7 +44,7 @@ export function useApi<T = unknown>() {
         return null;
       }
     },
-    [],
+    [token],
   );
 
   return { ...state, request };
