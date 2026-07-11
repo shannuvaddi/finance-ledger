@@ -18,16 +18,30 @@ export default function TransactionsScreen() {
   const { transactions, loading, createTransaction, fetchTransactions } = useTransactions();
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchTransactions();
   }, []);
 
   const handleSubmit = async () => {
-    if (!description.trim() || !amount.trim()) return;
+    if (!description.trim()) {
+      setError('Please enter a description');
+      return;
+    }
+    if (!amount.trim()) {
+      setError('Please enter an amount');
+      return;
+    }
+    const parsed = parseFloat(amount);
+    if (isNaN(parsed) || parsed === 0) {
+      setError('Please enter a valid amount');
+      return;
+    }
+    setError('');
     setDescription('');
     setAmount('');
-    await createTransaction(description.trim(), parseFloat(amount) || 0);
+    await createTransaction(description.trim(), parsed);
     fetchTransactions();
   };
 
@@ -44,7 +58,7 @@ export default function TransactionsScreen() {
           placeholder="What did you spend on?"
           placeholderTextColor={theme.muted}
           value={description}
-          onChangeText={setDescription}
+          onChangeText={(t) => { setDescription(t); setError(''); }}
         />
         <View style={styles.inputRow}>
           <TextInput
@@ -52,18 +66,19 @@ export default function TransactionsScreen() {
             placeholder="$0.00"
             placeholderTextColor={theme.muted}
             value={amount}
-            onChangeText={setAmount}
+            onChangeText={(t) => { setAmount(t); setError(''); }}
             keyboardType="numeric"
           />
           <TouchableOpacity
             style={[styles.sendBtn, { backgroundColor: theme.accent }]}
             onPress={handleSubmit}
-            disabled={loading || !description.trim() || !amount.trim()}
+            disabled={loading}
             activeOpacity={0.7}
           >
             <Ionicons name="add" size={22} color="#fff" />
           </TouchableOpacity>
         </View>
+        {error ? <Text style={[styles.errorText, { color: theme.danger }]}>{error}</Text> : null}
       </View>
 
       <FlatList
@@ -109,6 +124,7 @@ const styles = StyleSheet.create({
   inputRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 8 },
   amountInput: { flex: 1, borderBottomWidth: 1, paddingVertical: 8 },
   sendBtn: { width: 44, height: 44, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  errorText: { fontSize: 13, marginTop: 10 },
   list: { flex: 1 },
   row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 14, borderBottomWidth: 1 },
   rowIcon: { width: 34, height: 34, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },

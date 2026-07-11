@@ -1,5 +1,5 @@
 import {useFonts} from 'expo-font';
-import {Stack, useRouter, useSegments} from 'expo-router';
+import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
 import 'react-native-reanimated';
@@ -10,25 +10,26 @@ export { ErrorBoundary } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
-function RootLayoutNav() {
-  const { authenticated, loading } = useAuth();
-  const segments = useSegments();
-  const router = useRouter();
-
+function SplashController() {
+  const { loading } = useAuth();
   useEffect(() => {
-    if (loading) return;
-    const inAuthGroup = segments[0] === '(tabs)';
-    if (authenticated && !inAuthGroup) {
-      router.replace('/(tabs)');
-    } else if (!authenticated && inAuthGroup) {
-      router.replace('/');
-    }
-  }, [authenticated, loading, segments]);
+    if (!loading) SplashScreen.hideAsync();
+  }, [loading]);
+  return null;
+}
+
+function RootNavigator() {
+  const { authenticated } = useAuth();
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="(tabs)" />
+      <Stack.Protected guard={authenticated}>
+        <Stack.Screen name="(tabs)" />
+      </Stack.Protected>
+
+      <Stack.Protected guard={!authenticated}>
+        <Stack.Screen name="index" />
+      </Stack.Protected>
     </Stack>
   );
 }
@@ -42,15 +43,12 @@ export default function RootLayout() {
     if (error) throw error;
   }, [error]);
 
-  useEffect(() => {
-    if (loaded) SplashScreen.hideAsync();
-  }, [loaded]);
-
   if (!loaded) return null;
 
   return (
     <AuthProvider>
-      <RootLayoutNav />
+      <SplashController />
+      <RootNavigator />
     </AuthProvider>
   );
 }

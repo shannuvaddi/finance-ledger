@@ -9,7 +9,6 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import {useRouter} from 'expo-router';
 import {Ionicons} from '@expo/vector-icons';
 import {useAuth} from '../context/AuthContext';
 import {useTheme} from '../hooks/useThemeColor';
@@ -17,7 +16,6 @@ import {useGoogleAuth} from '../hooks/useGoogleAuth';
 
 export default function AuthScreen() {
   const { login, register } = useAuth();
-  const router = useRouter();
   const theme = useTheme();
   const { signIn: googleSignIn, isReady: googleReady } = useGoogleAuth();
 
@@ -51,8 +49,6 @@ export default function AuthScreen() {
 
     if (err) {
       setError(err);
-    } else {
-      router.replace('/(tabs)');
     }
   };
 
