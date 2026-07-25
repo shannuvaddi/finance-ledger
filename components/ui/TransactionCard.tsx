@@ -2,18 +2,21 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../hooks/useThemeColor';
+import { formatCurrency } from '../../constants/format';
 
 interface TransactionCardProps {
   description: string;
   amount: number;
   category?: string;
+  type?: 'credit' | 'debit';
   date: string;
 }
 
-export function TransactionCard({ description, amount, category, date }: TransactionCardProps) {
+export function TransactionCard({ description, amount, category, type, date }: TransactionCardProps) {
   const theme = useTheme();
-  const isExpense = amount < 0;
-  const formattedDate = new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+  // Prefer the backend-supplied type; fall back to the amount's sign when absent.
+  const isExpense = type ? type === 'debit' : amount < 0;
+  const formattedDate = new Date(date).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' });
 
   return (
     <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
@@ -24,10 +27,15 @@ export function TransactionCard({ description, amount, category, date }: Transac
       <View style={styles.body}>
         <Text style={[styles.description, { color: theme.text }]}>{description}</Text>
         <Text style={[styles.amount, { color: isExpense ? theme.danger : theme.success }]}>
-          {isExpense ? '-' : '+'}${Math.abs(amount).toFixed(2)}
+          {formatCurrency(amount)}
         </Text>
       </View>
       <View style={styles.footer}>
+        <View style={[styles.tag, { backgroundColor: (isExpense ? theme.danger : theme.success) + '20' }]}>
+          <Text style={[styles.tagText, { color: isExpense ? theme.danger : theme.success }]}>
+            {isExpense ? 'Debit' : 'Credit'}
+          </Text>
+        </View>
         {category && (
           <View style={[styles.tag, { backgroundColor: theme.accent + '20' }]}>
             <Text style={[styles.tagText, { color: theme.accent }]}>{category}</Text>

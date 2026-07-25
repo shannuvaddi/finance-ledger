@@ -50,6 +50,7 @@ export default function VoiceScreen() {
                 description={result.chat.transaction.description}
                 amount={result.chat.transaction.amount}
                 category={result.chat.transaction.category}
+                type={result.chat.transaction.type}
                 date={result.chat.transaction.date}
               />
             )}
@@ -58,7 +59,7 @@ export default function VoiceScreen() {
       </View>
 
       <Text style={[styles.hint, { color: theme.muted }]}>
-        e.g. "Spent forty dollars on dinner last night"
+        e.g. "Spent forty kronor on dinner last night"
       </Text>
     </View>
   );

@@ -34,12 +34,6 @@ export default function DashboardScreen() {
       <Text style={[styles.sectionTitle, { color: theme.textSecondary }]}>Quick Actions</Text>
 
       <ActionCard
-        title="Log Transaction"
-        subtitle="Add an expense or income"
-        icon="create-outline"
-        onPress={() => router.push('/(tabs)/transactions')}
-      />
-      <ActionCard
         title="Voice Record"
         subtitle="Speak to log a transaction"
         icon="mic-outline"

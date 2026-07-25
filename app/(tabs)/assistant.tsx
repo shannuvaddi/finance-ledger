@@ -44,6 +44,7 @@ export default function AssistantScreen() {
               description={item.transaction.description}
               amount={item.transaction.amount}
               category={item.transaction.category}
+              type={item.transaction.type}
               date={item.transaction.date}
             />
           )}
@@ -69,7 +70,7 @@ export default function AssistantScreen() {
       <View style={[styles.inputBar, { backgroundColor: theme.card, borderTopColor: theme.border }]}>
         <TextInput
           style={[styles.input, { color: theme.text }]}
-          placeholder="e.g. Spent $25 on lunch..."
+          placeholder="e.g. Spent 25 kr on lunch..."
           placeholderTextColor={theme.muted}
           value={input}
           onChangeText={setInput}

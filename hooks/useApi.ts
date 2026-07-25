@@ -19,8 +19,10 @@ export function useApi<T = unknown>() {
     error: null,
   });
 
+  // `R` lets a caller declare the response shape of a single request when it
+  // differs from the hook's `T` (e.g. a POST that returns one item, not a list).
   const request = useCallback(
-    async (endpoint: string, method: HttpMethod = 'GET', body?: unknown): Promise<T | null> => {
+    async <R = T>(endpoint: string, method: HttpMethod = 'GET', body?: unknown): Promise<R | null> => {
       setState({ data: null, loading: true, error: null });
       try {
         const headers: Record<string, string> = { 'Content-Type': 'application/json' };
@@ -36,9 +38,10 @@ export function useApi<T = unknown>() {
           const errorData = await res.json().catch(() => null);
           throw new Error(errorData?.error || `HTTP ${res.status}`);
         }
-        const data: T = await res.json();
-        setState({ data, loading: false, error: null });
-        return data;
+        // 204 No Content (e.g. DELETE) has no body to parse.
+        const data = res.status === 204 ? null : await res.json();
+        setState({ data: data as T, loading: false, error: null });
+        return data as R;
       } catch (e: any) {
         setState({ data: null, loading: false, error: e.message });
         return null;

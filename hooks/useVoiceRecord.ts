@@ -17,6 +17,7 @@ interface VoiceResult {
       description: string;
       amount: number;
       category?: string;
+      type?: 'credit' | 'debit';
       date: string;
     };
   };
