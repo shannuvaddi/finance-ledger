@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="260" viewBox="0 0 360 260">
+  <defs>
+    <linearGradient id="bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A50"/><stop offset="1" stop-color="#E65100"/></linearGradient>
+    <linearGradient id="coin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD27A"/><stop offset="1" stop-color="#F29C1F"/></linearGradient>
+  </defs>
+  <path d="M60 150c-18-58 30-118 100-124 62-6 128 18 150 70 24 56-8 120-78 138-74 20-154-20-172-84z" fill="#FF8A50" fill-opacity="0.16"/>
+  <circle cx="180" cy="130" r="112" fill="none" stroke="#E65100" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="4 7"/>
+  <!-- phone -->
+  <rect x="118" y="44" width="132" height="190" rx="22" fill="#E65100" fill-opacity="0.18"/>
+  <rect x="112" y="36" width="132" height="190" rx="22" fill="#FFFFFF"/>
+  <rect x="112" y="36" width="132" height="190" rx="22" fill="none" stroke="#F0E4D8" stroke-width="2"/>
+  <rect x="160" y="46" width="36" height="5" rx="2.5" fill="#F0E4D8"/>
+  <rect x="128" y="64" width="54" height="7" rx="3.5" fill="#2D1B0E" fill-opacity="0.75"/>
+  <rect x="128" y="77" width="34" height="5" rx="2.5" fill="#9C8572" fill-opacity="0.5"/>
+  <rect x="128" y="92" width="100" height="1.5" fill="#F0E4D8"/>
+  <rect x="134" y="160" width="16" height="40" rx="5" fill="#FFD6BA"/>
+  <rect x="158" y="142" width="16" height="58" rx="5" fill="#F4845F"/>
+  <rect x="182" y="124" width="16" height="76" rx="5" fill="#FF8A50"/>
+  <rect x="206" y="104" width="16" height="96" rx="5" fill="url(#bar)"/>
+  <polyline points="136,150 164,132 188,118 214,96" fill="none" stroke="#2E7D32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M205 94l12-2-3 12" fill="none" stroke="#2E7D32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="128" y="208" width="100" height="8" rx="4" fill="#FFF3E0"/>
+  <rect x="128" y="208" width="64" height="8" rx="4" fill="#FF8A50"/>
+  <!-- coin stack -->
+  <g>
+    <ellipse cx="74" cy="214" rx="30" ry="9" fill="#E65100" fill-opacity="0.15"/>
+    <rect x="46" y="186" width="56" height="24" fill="#E8912D"/>
+    <ellipse cx="74" cy="210" rx="28" ry="8" fill="#E8912D"/>
+    <ellipse cx="74" cy="198" rx="28" ry="8" fill="#F5A83A" stroke="#E8912D" stroke-width="1"/>
+    <ellipse cx="74" cy="186" rx="28" ry="8" fill="#FFC45C" stroke="#E8912D" stroke-width="1"/>
+    <rect x="46" y="162" width="56" height="16" fill="#E8912D"/>
+    <ellipse cx="74" cy="178" rx="28" ry="8" fill="#F5A83A" stroke="#E8912D" stroke-width="1"/>
+    <ellipse cx="74" cy="164" rx="28" ry="8" fill="#FFD27A" stroke="#E8912D" stroke-width="1.5"/>
+    <ellipse cx="74" cy="164" rx="18" ry="4.5" fill="none" stroke="#E8912D" stroke-width="1.5"/>
+  </g>
+  <!-- floating kr coin -->
+  <circle cx="284" cy="76" r="26" fill="url(#coin)"/>
+  <circle cx="284" cy="76" r="19" fill="none" stroke="#FFFFFF" stroke-opacity="0.7" stroke-width="2"/>
+  <text x="284" y="83" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">kr</text>
+  <!-- pie badge -->
+  <circle cx="290" cy="178" r="30" fill="#FFFFFF" stroke="#F0E4D8" stroke-width="2"/>
+  <path d="M290 178V156a22 22 0 0 1 21 28z" fill="#E65100"/>
+  <path d="M290 178l21 6a22 22 0 0 1-33 12z" fill="#FFB547"/>
+  <path d="M290 178l-12 18a22 22 0 0 1 12-40z" fill="#FFD6BA"/>
+  <!-- sparkles -->
+  <path d="M86 70l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="#FFB547"/>
+  <path d="M318 126l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#E65100" fill-opacity="0.7"/>
+  <circle cx="100" cy="120" r="4" fill="#E65100" fill-opacity="0.45"/>
+  <circle cx="262" cy="232" r="5" fill="#FFB547" fill-opacity="0.8"/>
+</svg>

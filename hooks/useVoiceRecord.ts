@@ -68,7 +68,14 @@ export function useVoiceRecord() {
           if (xhr.status >= 200 && xhr.status < 300) {
             resolve(JSON.parse(xhr.responseText));
           } else {
-            reject(new Error(`HTTP ${xhr.status}`));
+            // Voice is always transaction context; surface the backend's fail-loud
+            // message (e.g. 422 when no transaction was found in the speech).
+            let msg = `HTTP ${xhr.status}`;
+            try {
+              const body = JSON.parse(xhr.responseText);
+              if (body?.error) msg = body.error;
+            } catch {}
+            reject(new Error(msg));
           }
         };
         xhr.onerror = () => reject(new Error('Network request failed'));

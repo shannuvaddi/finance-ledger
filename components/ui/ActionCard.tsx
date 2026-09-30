@@ -2,25 +2,29 @@ import React from 'react';
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../hooks/useThemeColor';
+import { cardShadow } from '../../constants/gradients';
 
 interface ActionCardProps {
   title: string;
   subtitle?: string;
   icon: keyof typeof Ionicons.glyphMap;
+  /** Icon tint; defaults to the theme accent. */
+  color?: string;
   onPress: () => void;
 }
 
-export function ActionCard({ title, subtitle, icon, onPress }: ActionCardProps) {
+export function ActionCard({ title, subtitle, icon, color, onPress }: ActionCardProps) {
   const theme = useTheme();
+  const tint = color ?? theme.accent;
 
   return (
     <TouchableOpacity
-      style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}
+      style={[styles.card, cardShadow, { backgroundColor: theme.card, borderColor: theme.border }]}
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <View style={[styles.iconWrap, { backgroundColor: theme.accent + '18' }]}>
-        <Ionicons name={icon} size={22} color={theme.accent} />
+      <View style={[styles.iconWrap, { backgroundColor: tint + '1F' }]}>
+        <Ionicons name={icon} size={22} color={tint} />
       </View>
       <View style={styles.textWrap}>
         <Text style={[styles.label, { color: theme.text }]}>{title}</Text>
@@ -41,9 +45,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   iconWrap: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
+    width: 46,
+    height: 46,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },

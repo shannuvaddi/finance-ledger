@@ -18,6 +18,7 @@ export interface Transaction {
 
 export interface TransactionFilters {
   source?: TransactionSource;
+  period?: string; // YYYY-MM — resolved to a date range server-side
   from?: string; // YYYY-MM-DD
   to?: string;   // YYYY-MM-DD
 }
@@ -25,9 +26,10 @@ export interface TransactionFilters {
 function buildQuery(filters?: TransactionFilters): string {
   if (!filters) return '';
   const params = new URLSearchParams();
-  // The API applies `source` OR a `from`+`to` range (source takes precedence),
-  // so we only send what's set and let category/sort be handled client-side.
+  // The API resolves `period` to a date range (unless `source` is set, which takes
+  // precedence); explicit from/to still work. Category/sort are handled client-side.
   if (filters.source) params.set('source', filters.source);
+  if (filters.period) params.set('period', filters.period);
   if (filters.from) params.set('from', filters.from);
   if (filters.to) params.set('to', filters.to);
   const qs = params.toString();

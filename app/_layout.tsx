@@ -5,6 +5,7 @@ import {useEffect} from 'react';
 import 'react-native-reanimated';
 
 import {AuthProvider, useAuth} from '../context/AuthContext';
+import {PeriodProvider} from '../context/PeriodContext';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -47,8 +48,10 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <SplashController />
-      <RootNavigator />
+      <PeriodProvider>
+        <SplashController />
+        <RootNavigator />
+      </PeriodProvider>
     </AuthProvider>
   );
 }
